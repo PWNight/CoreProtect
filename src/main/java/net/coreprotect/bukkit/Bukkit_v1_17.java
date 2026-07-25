@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Material;
+import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -153,8 +154,14 @@ public class Bukkit_v1_17 extends BukkitAdapter {
     }
 
     @Override
+    public boolean isBundle(Material material) {
+        return material == Material.BUNDLE;
+    }
+
+
+    @Override
     public boolean setItemMeta(Material rowType, ItemStack itemstack, List<Map<String, Object>> map) {
-        if (rowType == Material.BUNDLE) {
+        if (BukkitAdapter.ADAPTER.isBundle(rowType)) {
             BundleMeta meta = (BundleMeta) itemstack.getItemMeta();
             for (Map<String, Object> itemData : map) {
                 ItemStack itemStack = ItemUtils.unserializeItemStack(itemData);
@@ -239,5 +246,10 @@ public class Bukkit_v1_17 extends BukkitAdapter {
     @Override
     public boolean isInvisible(Material material) {
         return material.isAir() || material == Material.LIGHT;
+    }
+
+    @Override
+    public boolean isChunkEntitiesLoaded(Chunk chunk) {
+        return chunk.isEntitiesLoaded();
     }
 }
